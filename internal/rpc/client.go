@@ -104,7 +104,7 @@ type Client struct {
 	AltURLs      []string
 	currIndex    int
 	mu           sync.RWMutex
-	httpClient   *http.Client
+	httpClient   httpclient.HTTPClient
 	token        string // stored for reference, not logged
 	Config       NetworkConfig
 	CacheEnabled bool
@@ -247,7 +247,7 @@ func (c *Client) rotateURL() bool {
 	return true
 }
 
-func (c *Client) getHTTPClient() *http.Client {
+func (c *Client) getHTTPClient() httpclient.HTTPClient {
 	if c.httpClient != nil {
 		return c.httpClient
 	}
@@ -255,7 +255,7 @@ func (c *Client) getHTTPClient() *http.Client {
 }
 
 // createHTTPClient creates an HTTP client with optional authentication and a configurable timeout.
-func createHTTPClient(token string, timeout time.Duration) *http.Client {
+func createHTTPClient(token string, timeout time.Duration) httpclient.HTTPClient {
 	cfg := DefaultRetryConfig()
 
 	var baseTransport http.RoundTripper = http.DefaultTransport
